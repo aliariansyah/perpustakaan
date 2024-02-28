@@ -69,6 +69,7 @@ if ($user_logged_in) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="dashboard.css">
     <title>Borrow Page</title>
     <style>
         body {
@@ -162,18 +163,61 @@ if ($user_logged_in) {
         <input type="hidden" name="email_address" value="<?php echo isset($email_address) ? htmlspecialchars($email_address) : ''; ?>">
         <input type="hidden" name="phone_number" value="<?php echo isset($phone_number) ? htmlspecialchars($phone_number) : ''; ?>">
 
-        <label for="request_date">Request Date:</label>
-        <input type="date" id="request_date" name="request_date" required>
+      <label for="request_date">Request Date:</label>
+<input type="date" id="request_date" name="request_date" required>
 
-        <label for="returning_date">Returning Date:</label>
-        <input type="date" id="returning_date" name="returning_date" required>
+<script>
+  // Get today's date in the format YYYY-MM-DD
+  const today = new Date().toISOString().split('T')[0];
 
-        <button type="submit" name="borrow_submit">Borrow</button>
-    </form>
-        <?php else : ?>
-            <p>Please log in as a user to borrow a book.</p>
-        <?php endif; ?>
-    </div>
+  // Set the input value to today's date
+  document.getElementById('request_date').value = today;
+
+  // Set the min attribute to today's date
+  document.getElementById('request_date').setAttribute('min', today);
+</script>
+
+<label for="returning_date">Returning Date:</label>
+<input type="date" id="returning_date" name="returning_date" required>
+
+<script>
+  const requestDateInput = document.getElementById('request_date');
+  const returningDateInput = document.getElementById('returning_date');
+
+  // Function to update the min attribute of returning_date based on selected request_date
+  function updateMinReturningDate() {
+    const requestDate = new Date(requestDateInput.value);
+    requestDate.setDate(requestDate.getDate() + 1); // Add 1 day to get the minimum returning date
+    const minReturningDate = requestDate.toISOString().split('T')[0];
+    returningDateInput.setAttribute('min', minReturningDate);
+  }
+
+  // Attach the update function to the change event of the request date input
+  requestDateInput.addEventListener('change', updateMinReturningDate);
+
+  // Set the min attribute of returning_date to today's date
+  returningDateInput.setAttribute('min', today);
+
+  // Function to check if the returning date is at least 1 day ahead of the request date
+  function validateReturningDate() {
+    const requestDate = new Date(requestDateInput.value);
+    const returningDate = new Date(returningDateInput.value);
+
+    if (returningDate <= requestDate) {
+      alert('Returning date must be at least 1 day ahead of the request date.');
+      returningDateInput.value = ''; // Clear the invalid date
+    }
+  }
+
+  // Attach the validation function to the change event of the returning date input
+  returningDateInput.addEventListener('change', validateReturningDate);
+</script>
+
+<button type="submit" name="borrow_submit">Borrow</button>
+</form>
+<?php else : ?>
+  <p>Please log in as a user to borrow a book.</p>
+<?php endif; ?>
+</div>
 </body>
-
 </html>

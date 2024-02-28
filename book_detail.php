@@ -54,6 +54,10 @@ if ($result_reviews === FALSE) {
     echo "Error executing reviews query: " . $conn->error;
     exit();
 }
+
+// Check if the quantity is greater than or equal to 1
+$quantity = isset($row['quantity']) ? intval($row['quantity']) : 0;
+$can_borrow = $quantity >= 1;
 ?>
 
 <!DOCTYPE html>
@@ -62,9 +66,10 @@ if ($result_reviews === FALSE) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="dashboard.css">
     <title>Book Detail - Dashboard</title>
     <style>
-                body {
+                       body {
             font-family: 'Roboto', sans-serif;
             background-color: #f5f5f5;
             margin: 0;
@@ -128,7 +133,8 @@ if ($result_reviews === FALSE) {
         }
 
         button {
-            background-color: #3498db;
+            margin-top: 10px;
+            background-color: #4caf50;
             color: #fff;
             padding: 10px 15px;
             border: none;
@@ -144,6 +150,7 @@ if ($result_reviews === FALSE) {
         .synopsis {
             margin-top: 20px;
         }
+
     </style>
 </head>
 
@@ -161,13 +168,16 @@ if ($result_reviews === FALSE) {
                 <strong>Publisher:</strong> <?php echo isset($row['publisher']) ? htmlspecialchars($row['publisher']) : ''; ?><br>
                 <strong>Year Released:</strong> <?php echo isset($row['year_released']) ? htmlspecialchars($row['year_released']) : ''; ?><br>
                 <strong>Category:</strong> <?php echo isset($row['category']) ? htmlspecialchars($row['category']) : ''; ?><br>
+                <strong>Quantity:</strong> <?php echo isset($row['quantity']) ? htmlspecialchars($row['quantity']) : ''; ?><br>
                 <strong class="synopsis">Synopsis:</strong> <?php echo isset($row['context']) ? nl2br(htmlspecialchars($row['context'])) : ''; ?><br>
 
-                <?php if ($user_logged_in) : ?>
+                <?php if ($user_logged_in && $can_borrow) : ?>
                     <form method="post" action="borrow_page.php">
                         <input type="hidden" name="book_id" value="<?php echo $book_id; ?>">
                         <button type="submit" name="borrow_book">Borrow</button>
                     </form>
+                <?php elseif (!$can_borrow) : ?>
+                    <p>This book is currently not available for borrowing.</p>
                 <?php endif; ?>
             </div>
             <div class="book-image">
@@ -185,6 +195,7 @@ if ($result_reviews === FALSE) {
                             <th>User</th>
                             <th>Rating</th>
                             <th>Review</th>
+                            <th>Time</th>
                             <!-- Add other columns as needed -->
                         </tr>
                     </thead>

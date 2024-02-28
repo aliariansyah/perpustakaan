@@ -57,38 +57,8 @@ $result = $conn->query($select_query);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="gaya.css">
+    <link rel="stylesheet" href="dashboard.css">
     <title>Admin Dashboard</title>
-    <style>
-        .book-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-
-        .book-item {
-            width: 23%;
-            margin-bottom: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            padding: 10px;
-            text-align: center;
-        }
-
-        .book-image {
-            max-width: 100%;
-            max-height: 100px;
-        }
-
-        .book-buttons {
-            margin-left: 40px;
-            margin-top: 10px;
-        }
-
-        .dashboard-links {
-            margin-top: 20px;
-        }
-    </style>
 </head>
 
 <body>
@@ -104,6 +74,8 @@ $result = $conn->query($select_query);
             <li><a href="manage_officer.php">Manage Officers</a></li>
             <li><a href="manage_user.php">Manage Users</a></li>
             <li><a href="officer_request.php">Officer Request</a></li>
+            <li><a href="monthly_report.php">Monthly Report</a></li>
+
         </ul>
 
         <!-- Display message if book added or removed successfully -->

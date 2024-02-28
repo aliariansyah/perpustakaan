@@ -101,7 +101,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <form method="post" action="">
             <label for="nis">NIS</label>
-            <input type="text" id="nis" name="nis" pattern="[0-9]{10}" required>
+            <input type="text" placeholder="nis must contain 10 number of your id" id="nis" name="nis" pattern="[0-9]{10}" required>
 
             <label for="full_name">Full Name:</label>
             <input type="text" id="full_name" name="full_name" required>
@@ -125,11 +125,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label for="telephone">Telephone:</label>
             <input type="tel" id="telephone" name="telephone"required>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-
+            
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" placeholder="It must have at least 12 unique characters" name="password" required>
 
             <button type="submit">Register</button>
 

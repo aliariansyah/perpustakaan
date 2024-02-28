@@ -50,7 +50,7 @@ if ($result_return === FALSE) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Requests - Officer Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="dashboard.css">
     <style>
         /* Add custom CSS styles here */
     </style>
@@ -107,6 +107,12 @@ if ($result_return === FALSE) {
                                         <button type="submit" name="confirm">Confirm</button>
                                     </form>
                                 </td>
+                                <td>
+    <form method="post" action="process_reject.php">
+        <input type="hidden" name="request_id" value="<?php echo $row['request_id']; ?>">
+        <button type="submit" name="reject">Reject</button>
+    </form>
+</td>
                             </tr>
                         <?php endwhile; ?>
                     </tbody>

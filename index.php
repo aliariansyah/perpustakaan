@@ -1,6 +1,5 @@
 <?php
 
-
 // Include the database connection code here
 $servername = "localhost";
 $username = "root";
@@ -14,16 +13,17 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+// Set the default time zone to your desired time zone
+date_default_timezone_set('Asia/Jakarta'); // Adjust this based on your time zone
+
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Retrieve user input
     $full_name = $_POST['full_name'];
-    $nis = $_POST["nis"];
-    $email = $_POST["email"];
     $password = $_POST["password"];
 
     // Query to check if the entered full name, NIS, or email exists in the database
-    $query = "SELECT * FROM users WHERE (full_name = '$full_name' OR nis = '$nis' OR email = '$email')";
+    $query = "SELECT * FROM users WHERE (full_name = '$full_name' OR password = '$password')";
     $result = $conn->query($query);
 
     if ($result->num_rows > 0) {
@@ -32,6 +32,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Verify the entered password against the hashed password in the database
         if (password_verify($password, $row["password"])) {
             // Successful login
+            // Update last_login in the database
+            $current_datetime = date("Y-m-d H:i:s");
+            $update_query = "UPDATE users SET last_login = '$current_datetime' WHERE id = '{$row['id']}'";
+            $conn->query($update_query);
+
             // Set user information in the session
             session_start();
             $_SESSION['user_id'] = $row['id'];
@@ -58,6 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
+
 ?>
 
 <!DOCTYPE html>
@@ -83,13 +89,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <label for="full_name">Full Name:</label>
             <input type="text" id="full_name" name="full_name" required>
-
-            <label for="nis">NIS:</label>
-            <input type="text" id="nis" name="nis" required>
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
 

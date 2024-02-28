@@ -28,6 +28,7 @@ $result = $conn->query($select_query);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - Digital Library</title>
     <link rel="stylesheet" href="dashboard.css">
 
 </head>
@@ -42,7 +43,19 @@ $result = $conn->query($select_query);
             <div class="dropdown-content" id="dropdownContent">
                 <a href="user_profile.php">User Profile</a><br>
                 <a href="user_history.php">Borrowing History</a><br> <!-- Added link to borrowing history -->
-                <a href="logout.php">Logout</a>
+                <a href="#" onclick="confirmLogout()">Logout</a>
+
+<script>
+  function confirmLogout() {
+    // Display a confirmation dialogue
+    const userConfirmed = confirm('Are you sure you want to logout?');
+
+    // If the user confirms, redirect to the logout.php page
+    if (userConfirmed) {
+      window.location.href = 'index.php';
+    }
+  }
+</script>
                 
             </div>
 
@@ -76,6 +89,7 @@ $result = $conn->query($select_query);
                 echo '<p>No books available.</p>';
             }
             ?>
+            
         </div>
     </div>
 
