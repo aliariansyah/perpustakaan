@@ -100,8 +100,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php endif; ?>
 
         <form method="post" action="">
-            <label for="nis">NIS</label>
-            <input type="text" placeholder="nis must contain 10 number of your id" id="nis" name="nis" pattern="[0-9]{10}" required>
+        <label for="nis">NIS</label>
+<input type="text" placeholder="NIS must contain 10 numbers" id="nis" name="nis" pattern="[0-9]{10}" title="Please enter 10 numeric digits" required>
+
 
             <label for="full_name">Full Name:</label>
             <input type="text" id="full_name" name="full_name" required>
@@ -123,7 +124,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="text" id="address" name="address" required>
 
             <label for="telephone">Telephone:</label>
-            <input type="tel" id="telephone" name="telephone"required>
+<input type="text" placeholder="Telephone must contain at least 12 numbers" id="telephone" name="telephone" pattern="[0-9]{12}" title="Telephone must contain exactly 12 numbers" required maxlength="12">
+
 
             
             <label for="email">Email:</label>

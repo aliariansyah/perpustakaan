@@ -59,7 +59,9 @@ $result = $conn->query($select_query);
             ?>
                 <div class="book-item">
                     <img class="book-image" src="<?php echo $row['image_path']; ?>" alt="<?php echo htmlspecialchars($row["title"]); ?>">
-                    <p><strong><?php echo htmlspecialchars($row['title']); ?></strong></p>
+                    <p><strong>Title: <?php echo htmlspecialchars($row['title']); ?></strong></p>
+                    <p><strong>Category: <?php echo htmlspecialchars($row['category']); ?></strong></p>
+                    <p><strong>Quantity: <?php echo htmlspecialchars($row['quantity']); ?></strong></p>
                     <div class="book-buttons">
                         <a href="edit_book.php?book_id=<?php echo $row['book_id']; ?>"><button type="button">Edit</button></a>
                     </div>

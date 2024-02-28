@@ -177,7 +177,7 @@ $can_borrow = $quantity >= 1;
                         <button type="submit" name="borrow_book">Borrow</button>
                     </form>
                 <?php elseif (!$can_borrow) : ?>
-                    <p>This book is currently not available for borrowing.</p>
+                    <button style="cursor: not-allowed" type="submit"  name="borrow_book">Out of Stock</button>
                 <?php endif; ?>
             </div>
             <div class="book-image">

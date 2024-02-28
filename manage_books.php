@@ -81,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["remove_book_confirm"])
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="dashboard.css">
-    <title>Manage Books - Admin Dashboard</title>
+    <title>Add books - Admin Dashboard</title>
     <script>
         function confirmDelete(bookId, imagePath) {
             var confirmDelete = confirm('Are you sure you want to delete this book?');
@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["remove_book_confirm"])
 
 <body>
     <div class="dashboard-container">
-        <h2>Manage Books:</h2>
+        <h2>Add Books:</h2>
         <h3><a href="admin_dashboard.php">Dashboard</a></h3>
         <!-- Form to add a new book -->
         <form method="post" action="" enctype="multipart/form-data">

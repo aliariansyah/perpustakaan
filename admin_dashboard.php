@@ -70,10 +70,10 @@ $result = $conn->query($select_query);
         <!-- Manage Section -->
         <h3>Manage:</h3>
         <ul>
-            <li><a href="manage_books.php">Manage Books</a></li>
+            <li><a href="manage_books.php">Add Books</a></li>
             <li><a href="manage_officer.php">Manage Officers</a></li>
             <li><a href="manage_user.php">Manage Users</a></li>
-            <li><a href="officer_request.php">Officer Request</a></li>
+           
             <li><a href="monthly_report.php">Monthly Report</a></li>
 
         </ul>
@@ -94,7 +94,9 @@ $result = $conn->query($select_query);
             ?>
                 <div class="book-item">
                     <img class="book-image" src="<?php echo $row['image_path']; ?>" alt="<?php echo htmlspecialchars($row["title"]); ?>">
-                    <p><strong><?php echo htmlspecialchars($row['title']); ?></strong></p>
+                    <p><strong>Title: <?php echo htmlspecialchars($row['title']); ?></strong></p>
+                    <p><strong>Category: <?php echo htmlspecialchars($row['category']); ?></strong></p>
+                    <p><strong>Quantity: <?php echo htmlspecialchars($row['quantity']); ?></strong></p>
                     <div class="book-buttons">
                         <form method="post" action="">
                             <input type="hidden" name="remove_book_confirm" value="true">

@@ -184,27 +184,31 @@ if ($user_logged_in) {
   const requestDateInput = document.getElementById('request_date');
   const returningDateInput = document.getElementById('returning_date');
 
-  // Function to update the min attribute of returning_date based on selected request_date
-  function updateMinReturningDate() {
+  // Function to update the min and max attributes of returning_date based on selected request_date
+  function updateReturningDateConstraints() {
     const requestDate = new Date(requestDateInput.value);
-    requestDate.setDate(requestDate.getDate() + 1); // Add 1 day to get the minimum returning date
+    const maxReturningDate = new Date(requestDate);
+    maxReturningDate.setDate(requestDate.getDate() + 7); // Set max returning date to 7 days ahead
     const minReturningDate = requestDate.toISOString().split('T')[0];
+    const maxReturningDateFormatted = maxReturningDate.toISOString().split('T')[0];
+    
     returningDateInput.setAttribute('min', minReturningDate);
+    returningDateInput.setAttribute('max', maxReturningDateFormatted);
   }
 
   // Attach the update function to the change event of the request date input
-  requestDateInput.addEventListener('change', updateMinReturningDate);
+  requestDateInput.addEventListener('change', updateReturningDateConstraints);
 
-  // Set the min attribute of returning_date to today's date
-  returningDateInput.setAttribute('min', today);
+  // Set the min and max attributes of returning_date based on today's date
+  updateReturningDateConstraints();
 
-  // Function to check if the returning date is at least 1 day ahead of the request date
+  // Function to check if the returning date is within the allowed range
   function validateReturningDate() {
     const requestDate = new Date(requestDateInput.value);
     const returningDate = new Date(returningDateInput.value);
 
-    if (returningDate <= requestDate) {
-      alert('Returning date must be at least 1 day ahead of the request date.');
+    if (returningDate <= requestDate || returningDate > maxReturningDate) {
+      alert('Returning date must be at least 1 day ahead and maximum within 7 days from the request date.');
       returningDateInput.value = ''; // Clear the invalid date
     }
   }
@@ -212,6 +216,7 @@ if ($user_logged_in) {
   // Attach the validation function to the change event of the returning date input
   returningDateInput.addEventListener('change', validateReturningDate);
 </script>
+
 
 <button type="submit" name="borrow_submit">Borrow</button>
 </form>

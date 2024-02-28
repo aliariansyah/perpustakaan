@@ -108,10 +108,10 @@ if ($result_return === FALSE) {
                                     </form>
                                 </td>
                                 <td>
-    <form method="post" action="process_reject.php">
-        <input type="hidden" name="request_id" value="<?php echo $row['request_id']; ?>">
-        <button type="submit" name="reject">Reject</button>
-    </form>
+    <form action="reject_form.php" method="GET">
+    <input type="hidden" name="request_id" value="<?php echo $row['request_id']; ?>">
+    <button type="submit">Reject</button>
+</form>
 </td>
                             </tr>
                         <?php endwhile; ?>
