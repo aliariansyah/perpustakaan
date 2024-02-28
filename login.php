@@ -348,5 +348,15 @@
    Have you tried turning it off and on again?
   </h2>
 
+  <button id="redirectButton">Refresh</button>
+
+<script>
+    // JavaScript to handle the redirection
+    document.getElementById('redirectButton').addEventListener('click', function() {
+        // Redirect to index.php
+        window.location.href = 'index.php';
+    });
+</script>
+
  
 </div>
