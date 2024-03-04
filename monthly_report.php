@@ -46,6 +46,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["generate_report"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Monthly Report - Admin Dashboard</title>
     <link rel="stylesheet" href="dashboard.css">
+    <style>
+        body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.dashboard-container {
+    max-width: 90%;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+h2, h3, h4 {
+    color: #333;
+}
+
+/* Add styles for monthly report tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+
+    </style>
 </head>
 
 <body>
@@ -124,48 +167,57 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["generate_report"])) {
                 </tbody>
             </table>
 
-            <!-- Table for Users with Fine -->
-            <?php
-            // Additional query for users with fine
-            $fine_query = "SELECT u.full_name AS user_name, bb.*, b.title AS book_title
-                           FROM book_borrow bb
-                           JOIN users u ON bb.user_id = u.id
-                           JOIN books b ON bb.book_id = b.book_id
-                           WHERE bb.fine > 0 AND MONTH(bb.returning_date) = '$selected_month' AND YEAR(bb.returning_date) = '$selected_year'";
-            $fine_result = $conn->query($fine_query);
-            ?>
+           <!-- Table for Users with Fine -->
+<?php
+// Additional query for users with fine
+$fine_query = "SELECT u.full_name AS user_name, bb.*, b.title AS book_title
+               FROM book_borrow bb
+               JOIN users u ON bb.user_id = u.id
+               JOIN books b ON bb.book_id = b.book_id
+               WHERE bb.fine > 0 ";
+$fine_result = $conn->query($fine_query);
 
-            <?php if ($fine_result->num_rows > 0) : ?>
-                <h4>Users with Fine</h4>
-                <table>
-                    <!-- Add headers for users with fine report information -->
-                    <thead>
-                        <tr>
-                            <!-- Modify headers based on your table structure -->
-                            <th>User Name</th>
-                            <th>Book Title</th>
-                            <th>Returning Date</th>
-                            <th>Fine Amount</th>
-                            <!-- Add other columns as needed -->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php while ($fine_row = $fine_result->fetch_assoc()) : ?>
-                            <tr>
-                                <!-- Display users with fine report information -->
-                                <!-- Modify columns based on your table structure -->
-                                <td><?php echo $fine_row['user_name']; ?></td>
-                                <td><?php echo $fine_row['book_title']; ?></td>
-                                <td><?php echo $fine_row['returning_date']; ?></td>
-                                <td><?php echo $fine_row['fine']; ?></td>
-                                <!-- Add other columns as needed -->
-                            </tr>
-                        <?php endwhile; ?>
-                    </tbody>
-                </table>
-            <?php else : ?>
-                <p>No users with fine for <?php echo date('F Y', strtotime($selected_year . '-' . $selected_month . '-01')); ?></p>
-            <?php endif; ?>
+// Check for query execution errors
+if ($fine_result === FALSE) {
+    echo "Error executing users with fine query: " . $conn->error;
+    exit();
+}
+?>
+
+<?php if ($fine_result->num_rows > 0) : ?>
+    <h4>Users with Fine</h4>
+    <table>
+        <!-- Add headers for users with fine report information -->
+        <thead>
+            <tr>
+                <!-- Modify headers based on your table structure -->
+                <th>User Name</th>
+                <th>Book Title</th>
+                <th>Returning Date</th>
+                <th>Actual Returning Date</th>
+                <th>Fine Amount</th>
+                <!-- Add other columns as needed -->
+            </tr>
+        </thead>
+        <tbody>
+            <?php while ($fine_row = $fine_result->fetch_assoc()) : ?>
+                <tr>
+                    <!-- Display users with fine report information -->
+                    <!-- Modify columns based on your table structure -->
+                    <td><?php echo $fine_row['user_name']; ?></td>
+                    <td><?php echo $fine_row['book_title']; ?></td>
+                    <td><?php echo $fine_row['returning_date']; ?></td>
+                    <td><?php echo $fine_row['actual_return_date']; ?></td>
+                    <td><?php echo $fine_row['fine']; ?></td>
+                    <!-- Add other columns as needed -->
+                </tr>
+            <?php endwhile; ?>
+        </tbody>
+    </table>
+<?php else : ?>
+    <p>No users with fine for <?php echo date('F Y', strtotime($selected_year . '-' . $selected_month . '-01')); ?></p>
+<?php endif; ?>
+
 
             <!-- Table for Users Details -->
             <?php

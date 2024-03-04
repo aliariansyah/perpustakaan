@@ -57,9 +57,48 @@ if ($result_already_borrowed === FALSE) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User History - User Dashboard</title>
-    <link rel="stylesheet" href="gaya.css">
+    <link rel="stylesheet" href="dashboard.css">
     <style>
-        /* Add custom CSS styles here */
+        body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.dashboard-container {
+    max-width: 90%;
+    margin: 50px auto;
+    padding: 20px;
+    border: 3px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+h2, h3 {
+    color: #333;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 2px solid #ddd;
+    border-color: black;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
     </style>
 </head>
 
@@ -212,6 +251,7 @@ if ($result_already_borrowed === FALSE) {
         </div>
 
   <!-- Display already borrowed history -->
+<!-- Display already borrowed history -->
 <h3>Already Borrowed History:</h3>
 
 <div class="already-borrowed-history">
@@ -224,6 +264,9 @@ if ($result_already_borrowed === FALSE) {
                     <th>Title</th>
                     <th>Request Date</th>
                     <th>Returning Date</th>
+                    <th>Actual Return Date</th>
+                    <th>status</th>
+                    <th>fine</th> <!-- Add column for actual return date -->
                     <!-- Add other columns as needed -->
                 </tr>
             </thead>
@@ -235,6 +278,9 @@ if ($result_already_borrowed === FALSE) {
                         <td><?php echo $row['title']; ?></td>
                         <td><?php echo $row['request_date']; ?></td>
                         <td><?php echo $row['returning_date']; ?></td>
+                        <td><?php echo $row['actual_return_date']; ?></td>
+                        <td><?php echo $row['stat']; ?></td>
+                        <td><?php echo $row['fine']; ?></td> <!-- Display actual return date -->
                         <!-- Add other columns as needed -->
 
                         <!-- Add a new column for the review action -->
@@ -255,7 +301,7 @@ if ($result_already_borrowed === FALSE) {
                                     echo '</form>';
                                 } else {
                                     // User has already submitted a review
-                                    echo 'review submited.';
+                                    echo 'review submitted.';
                                 }
                             ?>
                         </td>
@@ -267,6 +313,7 @@ if ($result_already_borrowed === FALSE) {
         <p>No already borrowed history available.</p>
     <?php endif; ?>
 </div>
+
 
         <!-- JavaScript function to open the review form -->
         <script>

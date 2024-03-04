@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $date_of_birth = $_POST["date_of_birth"];
     $address = $_POST["address"];
     $telephone = $_POST["telephone"];
-    $email = $_POST["email"];
+    $email = 'self_'.$_POST["email"];
     $password = $_POST["password"];
 
     // Validate NIS format (10 random numbers)
@@ -53,12 +53,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 // Hash the password
                 $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-                // Set the default role to "user"
-                $user_role = "user";
+                // Check if the registration is done by the user
+                $is_self_registration = true; // Assume it is a self-registration
 
-                // Insert user details into the database with hashed password and default role
+                // Insert user details into the database with hashed password and role
                 $insert_query = "INSERT INTO users (id, nis, full_name, gender, place_of_birth, date_of_birth, address, telephone, email, password, role)
-                                VALUES ('$random_id', '$nis', '$full_name', '$gender', '$place_of_birth', '$date_of_birth', '$address', '$telephone', '$email', '$hashed_password', '$user_role')";
+                                VALUES ('$random_id', '$nis', '$full_name', '$gender', '$place_of_birth', '$date_of_birth', '$address', '$telephone', '$email', '$hashed_password', '$is_self_registration')";
 
                 if ($conn->query($insert_query) === TRUE) {
                     // Display success message using JavaScript
@@ -79,6 +79,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 ?>
+
+<!-- ... rest of the HTML code ... -->
 
 <!DOCTYPE html>
 <html lang="en">

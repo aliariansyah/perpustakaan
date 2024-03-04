@@ -39,66 +39,72 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["return"]) && isset($_P
                         $stmt2->bind_param("i", $request_id);
 
                         if ($stmt2->execute()) {
-                            // Calculate and update fine if returning date has exceeded the limit
-                            $calculate_fine_query = "SELECT returning_date FROM borrow_requests WHERE request_id = ?";
+                            // Fetch returning_date and actual_return_date from book_borrow table
+                            $calculate_fine_query = "SELECT returning_date, actual_return_date FROM book_borrow WHERE request_id = ?";
                             $stmt3 = $conn->prepare($calculate_fine_query);
 
                             if ($stmt3) {
                                 $stmt3->bind_param("i", $request_id);
                                 $stmt3->execute();
-                                $stmt3->bind_result($returning_date);
+                                $stmt3->bind_result($returning_date, $actual_return_date);
                                 $stmt3->fetch();
                                 $stmt3->close();
 
-                                $current_date = date("Y-m-d");
-                                if ($current_date > $returning_date) {
-                                    // Calculate fine amount (1000 for each day exceeded)
-                                    $fine_amount = (strtotime($current_date) - strtotime($returning_date)) / (60 * 60 * 24) * 1000;
+                                if ($returning_date !== null && $actual_return_date !== null) {
+                                    // Calculate fine only if the book was returned
+                                    if ($returning_date > $actual_return_date) {
+                                        // Calculate fine amount (1000 for each day exceeded)
+                                        $fine_amount = (strtotime($returning_date) - strtotime($actual_return_date)) / (60 * 60 * 24) * 1000;
 
-                                    // Insert fine into the book_borrow table
-                                    $insert_fine_query = "UPDATE book_borrow SET fine = ? WHERE request_id = ?";
-                                    $stmt4 = $conn->prepare($insert_fine_query);
+                                        // Insert fine into the book_borrow table
+                                        $insert_fine_query = "UPDATE book_borrow SET fine = ? WHERE request_id = ?";
+                                        $stmt4 = $conn->prepare($insert_fine_query);
 
-                                    if ($stmt4) {
-                                        $stmt4->bind_param("ii", $fine_amount, $request_id);
+                                        if ($stmt4) {
+                                            $stmt4->bind_param("ii", $fine_amount, $request_id);
 
-                                        if ($stmt4->execute()) {
-                                            echo "<script>alert('Book returned successfully with fine: $fine_amount');</script>";
+                                            if ($stmt4->execute()) {
+                                                echo "<script>alert('Book returned successfully with fine: $fine_amount');</script>";
+                                            } else {
+                                                echo "Error updating fine: " . $stmt4->error;
+                                            }
+
+                                            $stmt4->close();
                                         } else {
-                                            echo "Error updating fine: " . $stmt4->error;
+                                            echo "Error preparing fine update statement: " . $conn->error;
                                         }
-
-                                        $stmt4->close();
                                     } else {
-                                        echo "Error preparing fine update statement: " . $conn->error;
+                                        echo "<script>alert('Book returned successfully');</script>";
                                     }
-                                } else {
-                                    echo "<script>alert('Book returned successfully');</script>";
-                                }
 
-                                echo '<script>
-                                        setTimeout(function() {
-                                            window.location.href = "officer_dashboard.php";
-                                        }, 1000);
-                                      </script>';
-                                exit();
+                                    echo '<script>
+                                            setTimeout(function() {
+                                                window.location.href = "officer_dashboard.php";
+                                            }, 1000);
+                                          </script>';
+                                    exit();
+                                } else {
+                                    echo "Error fetching returning_date and actual_return_date: " . $conn->error;
+                                }
                             } else {
                                 echo "Error preparing fine query: " . $conn->error;
                             }
+                        } else {
+                            echo "Error preparing status update statement: " . $conn->error;
                         }
                     } else {
-                        echo "Error preparing status update statement: " . $conn->error;
+                        echo "Error preparing quantity update statement: " . $conn->error;
                     }
                 } else {
-                    echo "Error updating quantity: " . $stmt1->error;
+                    echo "Error updating return: " . $stmt1->error;
                 }
 
                 $stmt1->close();
             } else {
-                echo "Error preparing quantity update statement: " . $conn->error;
+                echo "Error preparing return update statement: " . $conn->error;
             }
         } else {
-            echo "Error updating return: " . $stmt->error;
+            echo "Error preparing return update statement: " . $conn->error;
         }
 
         $stmt->close();

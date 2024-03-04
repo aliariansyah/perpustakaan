@@ -59,25 +59,72 @@ $result = $conn->query($select_query);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="dashboard.css">
     <title>Admin Dashboard</title>
+    <style>
+        /* Styling for the button */
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            border: none;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+
+        /* Styling for the dropdown */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        /* Additional styling for the list items */
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
 </head>
 
 <body>
     <div class="dashboard-container">
         <h2>Admin Dashboard</h2>
-        <p><a href="logout.php">Logout</a></p>
+       
         <h3>Welcome, <?php echo isset($_SESSION['full_name']) ? $_SESSION['full_name'] : 'Admin'; ?>!</h3>
 
-        <!-- Manage Section -->
-        <h3>Manage:</h3>
+        <div class="dropdown">
+    <button>Manage</button>
+    <div class="dropdown-content">
         <ul>
             <li><a href="manage_books.php">Add Books</a></li>
             <li><a href="manage_officer.php">Manage Officers</a></li>
             <li><a href="manage_user.php">Manage Users</a></li>
-           
             <li><a href="monthly_report.php">Monthly Report</a></li>
-
+            <li><a href="logout.php">Logout</a></li>
         </ul>
-
+    </div>
+</div>
         <!-- Display message if book added or removed successfully -->
         <?php if (isset($_SESSION['message'])) : ?>
             <p style="color: green;"><?php echo $_SESSION['message']; ?></p>
@@ -97,6 +144,9 @@ $result = $conn->query($select_query);
                     <p><strong>Title: <?php echo htmlspecialchars($row['title']); ?></strong></p>
                     <p><strong>Category: <?php echo htmlspecialchars($row['category']); ?></strong></p>
                     <p><strong>Quantity: <?php echo htmlspecialchars($row['quantity']); ?></strong></p>
+                    <p><strong>Writer: <?php echo htmlspecialchars($row['writer']); ?></strong></p>
+                    <p><strong>Publisher: <?php echo htmlspecialchars($row['publisher']); ?></strong></p>
+                    <p><strong>Release: <?php echo htmlspecialchars($row['year_released']); ?></strong></p>
                     <div class="book-buttons">
                         <form method="post" action="">
                             <input type="hidden" name="remove_book_confirm" value="true">

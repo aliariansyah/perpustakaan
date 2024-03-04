@@ -30,7 +30,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["add_book"])) {
     $year_released = $_POST["year_released"];
     $context = $_POST["context"];
     $quantity = $_POST["quantity"];
-    $category = $_POST["category"]; // Added category field
+    $category = $_POST["category"];
+    $isbn = $_POST["isbn"]; // Added ISBN field
 
     // Generate a 4-digit random number for book ID
     $book_id = str_pad(mt_rand(1, 9999), 4, '0', STR_PAD_LEFT);
@@ -43,8 +44,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["add_book"])) {
     move_uploaded_file($_FILES["image"]["tmp_name"], $image_path);
 
     // Insert book into database
-    $insert_query = "INSERT INTO books (book_id, title, writer, publisher, year_released, context, quantity, category, image_path) 
-                     VALUES ('$book_id', '$title', '$writer', '$publisher', '$year_released', '$context', '$quantity', '$category', '$image_path')";
+    $insert_query = "INSERT INTO books (book_id, title, writer, publisher, year_released, context, quantity, category, isbn, image_path) 
+                     VALUES ('$book_id', '$title', '$writer', '$publisher', '$year_released', '$context', '$quantity', '$category', '$isbn', '$image_path')";
 
     if ($conn->query($insert_query) === TRUE) {
         echo "<script>alert('Book added successfully');</script>";
@@ -95,6 +96,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["remove_book_confirm"])
                 // If not confirmed, do nothing
             }
         }
+
+        // JavaScript function to format ISBN with hyphens
+        function formatISBN(input) {
+            // Remove any existing hyphens and non-numeric characters
+            var cleanedInput = input.replace(/[^\d]/g, '');
+
+            // Apply formatting (3-3-4-2-1)
+            var formattedISBN = '';
+            for (var i = 0; i < cleanedInput.length; i++) {
+                if (i === 3 || i === 6 || i === 10 || i === 12) {
+                    formattedISBN += '-';
+                }
+                formattedISBN += cleanedInput.charAt(i);
+            }
+
+            // Set the formatted value back to the input field
+            document.getElementById('isbn').value = formattedISBN;
+        }
     </script>
 </head>
 
@@ -125,6 +144,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["remove_book_confirm"])
             <label for="category">Category:</label>
             <input type="text" id="category" name="category" required>
 
+            <label for="isbn">ISBN:</label>
+<input type="text" id="isbn" name="isbn" required oninput="formatISBN(this.value)" maxlength="16">
+
             <label for="image">Image:</label>
             <input type="file" id="image" name="image" accept="image/*" required>
 
@@ -132,7 +154,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["remove_book_confirm"])
         </form>
 
         <!-- Form to confirm book removal -->
-        <form method="post" action="">
+        <form method="post" action="" id="removeBookForm">
             <input type="hidden" id="book_id_to_remove" name="book_id">
             <input type="hidden" id="image_path_to_remove" name="image_path">
             <button type="submit" name="remove_book_confirm" style="display: none;">Confirm Remove</button>

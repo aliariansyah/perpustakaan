@@ -25,7 +25,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $date_of_birth = $_POST["date_of_birth"];
     $address = $_POST["address"];
     $telephone = $_POST["telephone"];
-    $email = $_POST["email"];
+    $email = 'admin_'.$_POST["email"];
     $password = $_POST["password"];
 
     // Validate NIS format (10 random numbers)

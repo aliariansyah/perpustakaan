@@ -54,8 +54,9 @@ $login_history_result = $conn->query($login_history_query);
 
 <body>
     <h2>User Login History</h2>
-    <p><a href="logout.php">Logout</a></p>
-        <p><a href="admin_dashboard.php">Dashboard</a></p>
+    <form action="admin_dashboard.php" method="GET">
+    <button type="submit">Dashboard</button>
+</form>
     <?php if ($login_history_result->num_rows > 0) : ?>
         <table>
             <thead>
